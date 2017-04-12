@@ -73,4 +73,8 @@ function getHrefForAllBooks($) {
     return hrefArray;
 }
 
+function emptyTest() {
+
+}
+
 scrapeWebPage();
