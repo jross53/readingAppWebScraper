@@ -10,8 +10,9 @@ let request = require('request');
 let cheerio = require('cheerio');
 
 let thHundredBooksUrl = 'http://thehundredbooks.com/';
+let finishedBooks = [];
 
-const pageSize = 500;
+const pageSize = 1000;
 
 //debugger;
 
@@ -59,8 +60,8 @@ function scrapeWebPage() {
 
 function saveBooks(books) {
     books.forEach(book => {
-        console.log(`Title: ${book.title}`);
-        console.log(book.contents);
+        //console.log(`Title: ${book.title}`);
+        //console.log(book.contents);
         sectionize(book);
     });
 }
@@ -78,47 +79,59 @@ function getHrefForAllBooks($) {
     return hrefArray;
 }
 
-function emptyTest() {
-
-}
-
 function sectionize(book) {
     let content = book.contents;
     let totalChars = content.length;
     let lastIndex = 0;
     let cleanBreak = false;
     let pageIncrement = pageSize;
-    //alert("In sectionize");
-    //alert(totalChars);
-    //let pages = Math.ceil(totalChars/pageSize); //divide char count by max chars per page to find out number of pages
-    //alert(pages);
-    //var pages = bookText.match(/.{1,300}/g);
-    for(i = 0; i < totalChars; i+= pageIncrement)
-    {
-        console.log("Page " + (i + 1));
+    let pageCounter = 0;
+    let pagedBook = {};
+
+    console.log("In sectionize");
+    console.log("Book is " + book.title);
+    pagedBook.title = book.title;
+    console.log("In pagedBook, the title is : " + pagedBook.title);
+    pagedBook.percentageRead = 0;
+    pagedBook.pages = [];
+
+    for(i = 0; i < totalChars; i = pageIncrement) {
+        console.log("Page " + (pageCounter + 1));
         lastIndex = i + pageSize;
-        let pageEndChar = content.charAt(lastIndex) //find last char on page
-        if(pageEndChar != "" && pageEndChar != " " && /[^a-zA-Z0-9]/.test(pageEndChar) == true) //see if it splits cleanly by miraculous chance
+        console.log("i is " + i);
+        console.log("Last Index = " + lastIndex);
+        let pageEndChar = content.charAt(lastIndex); //find last char on page
+        console.log("Page end char for this page is : " + pageEndChar);
+        if (/[a-zA-Z0-9]/.test(pageEndChar) == true) //see if it splits cleanly by miraculous chance
         {
-            for(j = lastIndex; cleanBreak == false; j--)
-            {
+            console.log("Char is alphanumeric");
+            for(j = lastIndex; cleanBreak === false; j--) {
+                console.log("In backup loop");
+
                 lastIndex = j - 1;
+                console.log("Last Index is " + lastIndex);
                 pageEndChar = content.charAt(lastIndex);
-                if(pageEndChar == "" || pageEndChar == " " || /[^a-zA-Z0-9]/.test(pageEndChar) == false){ //if it meets the condition for page break
+                console.log("New page end char is : " + pageEndChar);
+                if (/[a-zA-Z0-9]/.test(pageEndChar) == false) { //if it meets the condition for page break, which is nonalphanumeric
+                    console.log("New page end char is not alphanumeric");
                     cleanBreak = true; //then break out
                 }
             }
         }
-        let pageContent = content.substring(i, i + lastIndex + 1);
-        console.log(pageContent);
-        console.log("\r\n");
-        //document.getElementById("pages").innerHTML += pageContent + "_____________________________";
-        pageIncrement = lastIndex; //i + last index?
+        else {
+            console.log("Char is not alphanumeric");
+        }
+        //console.log("Does it ever get here?");
+        let pageContent = content.substring(i, lastIndex + 1);
+        pagedBook.pages.splice(pageCounter, 0, pageContent);
+        //console.log(pageContent);
+        pageIncrement = 1 + lastIndex;
         cleanBreak = false;
         lastIndex = 0;
+        pageCounter++;
     }
-    //document.getElementById("pagesDiv").innerHTML = pages;
-    //pages.split(',');
+    console.log(pagedBook.pages);
+    finishedBooks.push(pagedBook);
 }
 
 scrapeWebPage();
