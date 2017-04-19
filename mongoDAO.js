@@ -36,8 +36,12 @@ exports.findAll = function(callbackFunc) {
             return callbackFunc(err, null);
         }
 
-        db.collection(booksCollection).find(function(err, result) {
-            callbackFunc(err, result);
+        db.collection(booksCollection).find({}, {_id: 0}).toArray(function(err, items) {
+            if(err) {
+                throw err;
+            }
+
+            callbackFunc(err, items);
             db.close();
         });
     });

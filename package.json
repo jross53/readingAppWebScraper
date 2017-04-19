@@ -10,8 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "cheerio": "^0.22.0",
+    "compression": "^1.6.2",
     "express": "latest",
     "mongodb": "^2.2.26",
-    "request": "latest"
+    "morgan": "^1.8.1",
+    "request": "latest",
+    "serve-favicon": "latest"
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Created by Jordan.Ross on 4/11/2017.
+ * This file can be run to get all book contents from http://thehundredbooks.com saved in mongodb
  */
 console.log('Starting node...');
 
@@ -37,8 +37,6 @@ function getBookContentsForAllBooks(hrefForAllBooks) {
                 countAdded++;
                 if (countAdded === hrefCount) {
                     saveBooks(books);
-                } else {
-                    console.log(`Book count: ${countAdded}`);
                 }
             } else {
                 console.err(error);
