@@ -4,19 +4,24 @@
 console.log('Starting node...');
 
 let express = require('express');
-let app = express();
 let fs = require('fs');
 let request = require('request');
 let cheerio = require('cheerio');
+let mongoDAO = require('./mongoDAO');
 
-let thHundredBooksUrl = 'http://thehundredbooks.com/';
-let finishedBooks = [];
-
+const thHundredBooksUrl = 'http://thehundredbooks.com/';
 const pageSize = 1000;
 
-//debugger;
+mongoDAO.deleteAllBooks(function(err) {
+    if(err) {
+        throw err;
+    }
+    console.log('Deleted all books');
+});
 
 function getBookContentsForAllBooks(hrefForAllBooks) {
+    console.log('Getting contents of all the books');
+
     let books = [];
     let countAdded = 0;
     let hrefCount = hrefForAllBooks.length;
@@ -28,10 +33,12 @@ function getBookContentsForAllBooks(hrefForAllBooks) {
             if (!error) {
                 const $ = cheerio.load(html);
                 let text = $(`a[href*='twitter']`).parent().text();
-                books.push({title: book.title, contents: text});
+                books.push({title: book.title.trim(), contents: text});
                 countAdded++;
                 if (countAdded === hrefCount) {
                     saveBooks(books);
+                } else {
+                    console.log(`Book count: ${countAdded}`);
                 }
             } else {
                 console.err(error);
@@ -44,14 +51,13 @@ function getBookContentsForAllBooks(hrefForAllBooks) {
 }
 
 function scrapeWebPage() {
+    console.log('Starting to scrape the web page for books');
     request(thHundredBooksUrl, function (error, response, html) {
         if (!error) {
             const $ = cheerio.load(html);
-
             let hrefForAllBooks = getHrefForAllBooks($);
+
             getBookContentsForAllBooks(hrefForAllBooks);
-
-
         } else {
             console.err(error);
         }
@@ -60,10 +66,11 @@ function scrapeWebPage() {
 
 function saveBooks(books) {
     books.forEach(book => {
-        //console.log(`Title: ${book.title}`);
-        //console.log(book.contents);
-        sectionize(book);
+        let pagedBook = generateBookWithPages(book);
+        mongoDAO.insertBook(pagedBook);
+        console.log(`Book added: ${pagedBook.title}`);
     });
+    console.log('All books have been saved');
 }
 
 function getHrefForAllBooks($) {
@@ -79,7 +86,7 @@ function getHrefForAllBooks($) {
     return hrefArray;
 }
 
-function sectionize(book) {
+function generateBookWithPages(book) {
     let content = book.contents;
     let totalChars = content.length;
     let lastIndex = 0;
@@ -88,50 +95,32 @@ function sectionize(book) {
     let pageCounter = 0;
     let pagedBook = {};
 
-    console.log("In sectionize");
-    console.log("Book is " + book.title);
     pagedBook.title = book.title;
-    console.log("In pagedBook, the title is : " + pagedBook.title);
     pagedBook.percentageRead = 0;
     pagedBook.pages = [];
 
-    for(i = 0; i < totalChars; i = pageIncrement) {
-        console.log("Page " + (pageCounter + 1));
+    for (let i = 0; i < totalChars; i = pageIncrement) {
         lastIndex = i + pageSize;
-        console.log("i is " + i);
-        console.log("Last Index = " + lastIndex);
         let pageEndChar = content.charAt(lastIndex); //find last char on page
-        console.log("Page end char for this page is : " + pageEndChar);
+
         if (/[a-zA-Z0-9]/.test(pageEndChar) == true) //see if it splits cleanly by miraculous chance
         {
-            console.log("Char is alphanumeric");
-            for(j = lastIndex; cleanBreak === false; j--) {
-                console.log("In backup loop");
-
+            for (let j = lastIndex; cleanBreak === false; j--) {
                 lastIndex = j - 1;
-                console.log("Last Index is " + lastIndex);
                 pageEndChar = content.charAt(lastIndex);
-                console.log("New page end char is : " + pageEndChar);
                 if (/[a-zA-Z0-9]/.test(pageEndChar) == false) { //if it meets the condition for page break, which is nonalphanumeric
-                    console.log("New page end char is not alphanumeric");
                     cleanBreak = true; //then break out
                 }
             }
         }
-        else {
-            console.log("Char is not alphanumeric");
-        }
-        //console.log("Does it ever get here?");
         let pageContent = content.substring(i, lastIndex + 1);
         pagedBook.pages.splice(pageCounter, 0, pageContent);
-        //console.log(pageContent);
         pageIncrement = 1 + lastIndex;
         cleanBreak = false;
         lastIndex = 0;
         pageCounter++;
     }
-    console.log(pagedBook.pages);
-    finishedBooks.push(pagedBook);
+    return pagedBook;
 }
 
 scrapeWebPage();
