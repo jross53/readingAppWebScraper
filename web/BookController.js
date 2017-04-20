@@ -4,7 +4,8 @@
 let readingApp = angular.module('readingApp', []);
 
 readingApp.controller('BookController', ['$scope', '$http', function($scope, $http) {
-    $scope.test = "hi there";
+    $scope.books = [];
+
     function getBooks() {
         $http.get('/books').then(displayBooks);
     }
@@ -14,6 +15,10 @@ readingApp.controller('BookController', ['$scope', '$http', function($scope, $ht
     };
 
     function displayBooks(books) {
+        for(let index = 0; index < books.data.length; index += 2) {
+            books.data[index].percentageRead = Math.floor(Math.random() * 100);
+        }
+
         $scope.books = books.data;
     }
 

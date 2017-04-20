@@ -11,10 +11,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
-<body ng-app="readingApp" ng-controller="BookController">
-<ul>
-    <li ng-repeat="book in books">{{book.title}}</li>
-</ul>
+<body class="container-fluid" ng-app="readingApp" ng-controller="BookController">
+<div class="row">
+    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        Read
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action"
+               ng-repeat="book in books | orderBy: 'percentageRead' : true"
+               ng-if="book.percentageRead > 0">
+                {{book.title}}
+                <span class="badge" title="Percent Read">{{book.percentageRead}}%</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        Not Read
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action" ng-repeat="book in books"
+               ng-if="book.percentageRead === 0">
+                {{book.title}}
+            </a>
+        </div>
+    </div>
+</div>
+
+
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 <script src="BookController.js"></script>
