@@ -1,0 +1,76 @@
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
+body {
+    padding-top:60px;
+}
+
+.headerImage {
+    padding-top: 4px;
+    width: 40px;
+}
+
+.listItemHeader {
+    font-size: 25px;
+    color: #555;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #eceaea;
+    border: 1px solid #ddd;
+}
+
+a:hover {
+    color: #fff !important;
+    background-color: #2196F3 !important;
+}
+
+.active:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    opacity: 100 !important;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: 10px;
+    border: 5px solid transparent;
+    border-top-color: black;
+}
+
+.tooltiptext {
+    opacity: .85;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.badge {
+    background-color: cornflowerblue !important;
+}

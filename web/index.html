@@ -3,39 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Reading App</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!--&lt;!&ndash; Optional theme &ndash;&gt;-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
 </head>
-<body class="container-fluid" ng-app="readingApp" ng-controller="BookController">
+<body class="container-fluid" ng-app="readingApp" ng-controller="BookController" ng-cloak>
+<header class="navbar navbar-default navbar-fixed-top navbar-inner">
+    <img class="img-responsive center-block headerImage" src="favicon.png">
+</header>
 <div class="row">
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-        Read
         <div class="list-group">
+            <span class="listItemHeader">Read books</span>
             <a href="#" class="list-group-item list-group-item-action"
                ng-repeat="book in books | orderBy: 'percentageRead' : true"
-               ng-if="book.percentageRead > 0">
+               ng-if="book.percentageRead === 100"
+               ng-click="displayBook(book)">
                 {{book.title}}
-                <span class="badge" title="Percent Read">{{book.percentageRead}}%</span>
             </a>
         </div>
     </div>
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-        Not Read
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action" ng-repeat="book in books"
-               ng-if="book.percentageRead === 0">
+            <span class="listItemHeader">Unread books</span>
+            <a href="#" class="list-group-item list-group-item-action"
+               ng-repeat="book in books | orderBy: 'percentageRead' : true"
+               ng-if="book.percentageRead < 100"
+               ng-click="displayBook(book)">
                 {{book.title}}
+                <span class="badge tooltip">
+                    <span class="tooltiptext">Percent Read</span>
+                    {{book.percentageRead}}%
+                </span>
             </a>
         </div>
     </div>
 </div>
-
-
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 <script src="BookController.js"></script>

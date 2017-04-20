@@ -10,21 +10,21 @@ readingApp.controller('BookController', ['$scope', '$http', function($scope, $ht
         $http.get('/books').then(displayBooks);
     }
 
-    $scope.getBook = function (title) {
-        $http.get('/book/getPages', {params: {title: title}}).then(displayBook);
-    };
-
     function displayBooks(books) {
-        for(let index = 0; index < books.data.length; index += 2) {
-            books.data[index].percentageRead = Math.floor(Math.random() * 100);
+        for(let index = 0; index < 10; index++) {
+            books.data[index].percentageRead = 100;
+        }
+
+        for(let index = 10; index < books.data.length; index++) {
+            books.data[index].percentageRead = Math.floor(Math.random() * 101);
         }
 
         $scope.books = books.data;
     }
 
-    function displayBook(book) {
-
-    }
+    $scope.displayBook = function(book) {
+        console.log(`Book clicked: ${book.title}`);
+    };
 
     getBooks();
 }]);
