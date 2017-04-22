@@ -94,8 +94,9 @@ function generateBookWithPages(book) {
     let pagedBook = {};
 
     pagedBook.title = book.title;
-    pagedBook.percentageRead = 0;
+    //pagedBook.percentageRead = 0;
     pagedBook.pages = [];
+    pagedBook.currentPage = 1;
 
     for (let i = 0; i < totalChars; i = pageIncrement) {
         lastIndex = i + pageSize;
@@ -118,6 +119,7 @@ function generateBookWithPages(book) {
         lastIndex = 0;
         pageCounter++;
     }
+    pagedBook.totalPages = pagedBook.pages.count;
     return pagedBook;
 }
 
