@@ -119,7 +119,7 @@ function generateBookWithPages(book) {
         lastIndex = 0;
         pageCounter++;
     }
-    pagedBook.totalPages = pagedBook.pages.count;
+    pagedBook.totalPages = pageCounter;
     return pagedBook;
 }
 

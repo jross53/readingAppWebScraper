@@ -19,7 +19,7 @@
             <span class="listItemHeader">Read books</span>
             <a href="#" class="list-group-item list-group-item-action"
                ng-repeat="book in books | orderBy: 'percentageRead' : true"
-               ng-if="book.percentageRead === 100"
+               ng-if="getPercentage(book) === 100"
                ng-click="displayBook(book)">
                 {{book.title}}
             </a>
@@ -30,16 +30,28 @@
             <span class="listItemHeader">Unread books</span>
             <a href="#" class="list-group-item list-group-item-action"
                ng-repeat="book in books | orderBy: 'percentageRead' : true"
-               ng-if="book.percentageRead < 100"
+               ng-if="getPercentage(book) < 100"
                ng-click="displayBook(book)">
                 {{book.title}}
                 <span class="badge tooltip">
                     <span class="tooltiptext">Percent Read</span>
-                    {{book.percentageRead}}%
+                    {{getPercentage(book)}}%
                 </span>
             </a>
         </div>
     </div>
+    <!--<div modal="exampleModal" close="cancel()">-->
+        <!--<div class="modal-header">-->
+            <!--<h4>Modal Dialog</h4>-->
+        <!--</div>-->
+        <!--<div class="modal-body">-->
+            <!--<p>Example paragraph with some text.</p>-->
+        <!--</div>-->
+        <!--<div class="modal-footer">-->
+            <!--<button class="btn btn-success" ng-click="ok()">Okay</button>-->
+            <!--<button class="btn" ng-click="cancel()">Cancel</button>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
