@@ -32,6 +32,23 @@ readingApp.controller('BookController', ['$scope', '$http',
             $scope.modelIsHidden = true;
         };
 
+        $scope.pageForward = function(book) {
+            if($scope.currentPageNumber != book.totalPages) {
+                $scope.currentPage = book.pages[$scope.currentPageNumber];
+                $scope.currentPageNumber++;
+            }
+            else {
+                alert(`You finished ${book.title}`);
+            }
+        };
+
+        $scope.pageBack = function(book){
+            if($scope.currentPageNumber > 1) {
+                $scope.currentPage = book.pages[$scope.currentPageNumber - 2];
+                $scope.currentPageNumber--;
+            }
+        };
+
         getBooks();
     }
 ]);
