@@ -17,7 +17,9 @@ readingApp.controller('BookController', ['$scope', '$http',
         }
 
         $scope.getPercentage = function (book) {
-            return Math.floor(book.currentPage / book.totalPages);
+            //if(book.title === "Moby-Dick") console.log(`${book.title} is at ${book.currentPage} of ${book.totalPages}`);
+            if(book.currentPage !== 1) return Math.floor((book.currentPage / book.totalPages) * 100);
+            else return 0;
         };
 
         $scope.displayBook = function (book) {
@@ -29,11 +31,25 @@ readingApp.controller('BookController', ['$scope', '$http',
         };
 
         $scope.close = function (result) {
+            let data = {"currentPage": $scope.currentPageNumber};
+            console.log(`Current page number is ${$scope.currentPageNumber}`);
+            console.log(`Data is sent as ${JSON.stringify(data)}`);
+            $http.put(`/book/${$scope.selectedBook.title}.json`, data)
+                .then(
+                    function(response){
+                        // success callback
+                        console.log(`Success, response: ${response}`);
+                    },
+                    function(response){ //its calling this when the page is reloaded for some reason?
+                        // failure callback
+                        console.log(`Failure, response: ${response}`);
+                    }
+                );
             $scope.modelIsHidden = true;
         };
 
         $scope.pageForward = function(book) {
-            if($scope.currentPageNumber != book.totalPages) {
+            if($scope.currentPageNumber !== book.totalPages) {
                 $scope.currentPage = book.pages[$scope.currentPageNumber];
                 $scope.currentPageNumber++;
             }

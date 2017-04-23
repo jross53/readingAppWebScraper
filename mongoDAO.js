@@ -47,16 +47,16 @@ exports.findAll = function(callbackFunc) {
     });
 };
 
-exports.updateBook = function(title, data, callbackFunc) {
+exports.updateBook = function(title, data) {
     mongo.connect(URL, function(err, db) {
-        if (err) return callbackFunc(err);
+        if (err) throw err;
 
         db.collection(booksCollection)
             .updateOne(
                 {title: title},
                 {$set: data},
                 function(err, result) {
-                    callbackFunc(err, result.result);
+                    //callbackFunc(err, result.result);
                     db.close()
                 }
             )
