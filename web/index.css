@@ -82,3 +82,7 @@ a:focus {
 .badge {
     background-color: cornflowerblue !important;
 }
+
+.modal-backdrop {
+    background-color: #704214;
+}

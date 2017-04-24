@@ -17,7 +17,6 @@ readingApp.controller('BookController', ['$scope', '$http',
         }
 
         $scope.getPercentage = function (book) {
-            //if(book.title === "Moby-Dick") console.log(`${book.title} is at ${book.currentPage} of ${book.totalPages}`);
             if(book.currentPage !== 1) return Math.floor((book.currentPage / book.totalPages) * 100);
             else return 0;
         };
@@ -46,6 +45,7 @@ readingApp.controller('BookController', ['$scope', '$http',
                     }
                 );
             $scope.modelIsHidden = true;
+            $http.get('/books').then(displayBooks);
         };
 
         $scope.pageForward = function(book) {
