@@ -94,7 +94,6 @@ function generateBookWithPages(book) {
     let pagedBook = {};
 
     pagedBook.title = book.title;
-    //pagedBook.percentageRead = 0;
     pagedBook.pages = [];
     pagedBook.currentPage = 1;
 
@@ -113,7 +112,6 @@ function generateBookWithPages(book) {
             }
         }
         let pageContent = content.substring(i, lastIndex + 1);
-        //console.log(pageContent);
         pagedBook.pages.splice(pageCounter, 0, pageContent);
         pageIncrement = 1 + lastIndex;
         cleanBreak = false;
@@ -121,15 +119,12 @@ function generateBookWithPages(book) {
         pageCounter++;
     }
     pagedBook.totalPages = pageCounter;
-    //if (pagedBook.title === "Moby-Dick") console.log(pagedBook);
     return cleanBooks(pagedBook);
 }
 
 function cleanBooks(book) {
     for(let i = 0; i < book.totalPages; i++){
         book.pages[i] = book.pages[i].replace(/\n/g, "<br>");
-        //book.pages[i] = book.pages[i].replace(/\"\"/g, "");
-        //book.pages[i] = book.pages[i].replace(/\r/g, "")
     }
     if(book.title === "Moby-Dick") console.log(book);
     return book;

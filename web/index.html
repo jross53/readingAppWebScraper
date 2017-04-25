@@ -60,7 +60,8 @@
             <div class="modal-footer">
                 <span class="currentPageNumber">Page {{currentPageNumber}}</span>
                 <button type="button" class="btn btn-primary" ng-click="pageBack(selectedBook)">Previous Page</button>
-                <button type="button" class="btn btn-primary" ng-click="pageForward(selectedBook)">Next Page</button>
+                <button type="button" class="btn btn-primary" ng-click="pageForward(selectedBook)" ng-hide="currentPageNumber == selectedBook.totalPages">Next Page</button>
+                <button type="button" class="btn btn-primary" ng-click="close()" data-dismiss="modal" ng-show="currentPageNumber == selectedBook.totalPages">Finish Book</button>
             </div>
         </div>
     </div>

@@ -60,9 +60,6 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
                 $scope.currentPage = book.pages[$scope.currentPageNumber];
                 $scope.currentPageNumber++;
             }
-            else {
-                alert(`You finished ${book.title}`);
-            }
         };
 
         $scope.pageBack = function (book) {

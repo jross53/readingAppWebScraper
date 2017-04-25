@@ -20,11 +20,12 @@ exports.insertBook = function (book) {
 exports.findOneByTitle = function (title, callbackFunc) {
     mongo.connect(URL, function (err, db) {
         if (err) {
-            return callbackFunc(err, null);
+            if(callbackFunc) return callbackFunc(err, null);
+            else throw err;
         }
 
         db.collection(booksCollection).findOne({title: title}, {}, function (err, result) {
-            callbackFunc(err, result);
+            if(callbackFunc) callbackFunc(err, result);
             db.close();
         });
     });
@@ -40,8 +41,7 @@ exports.findAll = function(callbackFunc) {
             if(err) {
                 throw err;
             }
-
-            callbackFunc(err, items);
+            if(callbackFunc) callbackFunc(err, items);
             db.close();
         });
     });
@@ -56,7 +56,6 @@ exports.updateBook = function(title, data) {
                 {title: title},
                 {$set: data},
                 function(err, result) {
-                    //callbackFunc(err, result.result);
                     db.close()
                 }
             )
@@ -71,7 +70,7 @@ exports.deleteAllBooks = function (callbackFunc) {
 
 
         db.collection(booksCollection).deleteMany({}, function (err, result) {
-                callbackFunc(err, result);
+            if(callbackFunc) callbackFunc(err, result);
                 db.close()
             }
         )
