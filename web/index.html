@@ -19,10 +19,9 @@
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
         <div class="list-group">
             <span class="listItemHeader">Read books</span>
-            <a href="#" class="list-group-item list-group-item-action"
+            <a href="#" class="list-group-item readBook"
                ng-repeat="book in books"
-               ng-if="book.percentageRead === 100"
-               ng-click="displayBook(book)">
+               ng-if="book.percentageRead === 100">
                 {{book.title}}
             </a>
         </div>
@@ -34,7 +33,7 @@
                ng-repeat="book in books | orderBy: 'percentageRead' : true"
                ng-if="book.percentageRead < 100"
                ng-click="displayBook(book)"
-               data-toggle="modal" data-target="#myModal">
+               data-toggle="modal" data-target="#readBookModal">
                 {{book.title}}
                 <span ng-show="modalIsHidden" class="badge tooltip">
                     <span class="tooltiptext">Percent Read</span>
@@ -46,7 +45,7 @@
 </div>
 
 <!--Modal for reading-->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="readBookModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->

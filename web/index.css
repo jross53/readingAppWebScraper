@@ -16,6 +16,10 @@ body {
     }
 }
 
+.readBook {
+    cursor: default;
+}
+
 .navbar {
     z-index: 1071;
 }

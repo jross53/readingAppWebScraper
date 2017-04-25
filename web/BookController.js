@@ -3,21 +3,25 @@
  */
 let readingApp = angular.module('readingApp', ['ngSanitize', 'rzModule']);
 
-readingApp.controller('BookController', ['$scope', '$http', '$timeout', '$interval',
+readingApp.controller('BookController', ['$scope', '$http', '$timeout',
     function ($scope, $http, $timeout) {
         $scope.books = [];
         $scope.modalIsHidden = true;
         $scope.showFontSlider = false;
         $scope.defaultSliderValue = 6;
-        $scope.slider = {
-            value: 6,
-            options: {
-                showSelectionBar: true,
-                floor: 0,
-                ceil: 70,
-                step: 1
-            }
-        };
+        function createSlider() {
+            //the slider range is 0 to 70
+            //the actual font range is 8px to 78px, but for a better user experience the slider values are offset
+            $scope.slider = {
+                value: $scope.defaultSliderValue,
+                options: {
+                    showSelectionBar: true,
+                    floor: 0,
+                    ceil: 70,
+                    step: 1
+                }
+            };
+        }
 
         function getBooks() {
             $http.get('/books').then(displayBooks);
@@ -50,7 +54,7 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout', '$interv
             }, 500);
         }
 
-        $scope.close = function (result) {
+        $scope.close = function () {
             let data = {"currentPage": $scope.currentPageNumber};
             $http.put(`/book/${$scope.selectedBook.title}.json`, data)
                 .then(
@@ -67,6 +71,11 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout', '$interv
             $http.get('/books').then(displayBooks);
         };
 
+        //this handles if the modal is closed in a way other than the close button
+        angular.element('#readBookModal').on('hide.bs.modal', function() {
+            $scope.close();
+        });
+
         $scope.pageForward = function (book) {
             if ($scope.currentPageNumber !== book.totalPages) {
                 $scope.currentPage = book.pages[$scope.currentPageNumber];
@@ -81,31 +90,22 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout', '$interv
             }
         };
 
-        $scope.toggleFontSliderVisible = function() {
+        $scope.toggleFontSliderVisible = function () {
             $scope.showFontSlider = !$scope.showFontSlider;
-            if($scope.showFontSlider === true) {
+            if ($scope.showFontSlider === true) {
                 initializeSlider();
             }
         };
 
         function initializeSlider() {
-            // $timeout(function() {
-            //     $scope.$broadcast('reCalcViewDimensions');
-            // }, 250);
-            //
+            //when the slider is initialized it isn't visible which causes the slider to not render correctly
+            //this code causes the slider to be rendered correctly when it is made visible
             $timeout(function () {
                 $scope.$broadcast('rzSliderForceRender');
             });
-
-            // let currentValue = $scope.slider.value;
-            // $scope.slider.value = 0;
-            // for(let times = 0; times < currentValue; times++) {
-            //     $timeout(function() {
-            //         $scope.slider.value++;
-            //     }, 200);
-            // }
         }
 
+        createSlider();
         getBooks();
     }
 ]);
