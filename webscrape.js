@@ -102,17 +102,18 @@ function generateBookWithPages(book) {
         lastIndex = i + pageSize;
         let pageEndChar = content.charAt(lastIndex); //find last char on page
 
-        if (/[a-zA-Z0-9]/.test(pageEndChar) == true) //see if it splits cleanly by miraculous chance
+        if (/[a-zA-Z0-9]/.test(pageEndChar) === true) //see if it splits cleanly by miraculous chance
         {
             for (let j = lastIndex; cleanBreak === false; j--) {
                 lastIndex = j - 1;
                 pageEndChar = content.charAt(lastIndex);
-                if (/[a-zA-Z0-9]/.test(pageEndChar) == false) { //if it meets the condition for page break, which is nonalphanumeric
+                if (/[a-zA-Z0-9]/.test(pageEndChar) === false) { //if it meets the condition for page break, which is nonalphanumeric
                     cleanBreak = true; //then break out
                 }
             }
         }
         let pageContent = content.substring(i, lastIndex + 1);
+        //console.log(pageContent);
         pagedBook.pages.splice(pageCounter, 0, pageContent);
         pageIncrement = 1 + lastIndex;
         cleanBreak = false;
@@ -120,7 +121,18 @@ function generateBookWithPages(book) {
         pageCounter++;
     }
     pagedBook.totalPages = pageCounter;
-    return pagedBook;
+    //if (pagedBook.title === "Moby-Dick") console.log(pagedBook);
+    return cleanBooks(pagedBook);
+}
+
+function cleanBooks(book) {
+    for(let i = 0; i < book.totalPages; i++){
+        book.pages[i] = book.pages[i].replace(/\n/g, "<br>");
+        //book.pages[i] = book.pages[i].replace(/\"\"/g, "");
+        //book.pages[i] = book.pages[i].replace(/\r/g, "")
+    }
+    if(book.title === "Moby-Dick") console.log(book);
+    return book;
 }
 
 scrapeWebPage();

@@ -1,7 +1,7 @@
 /**
  * Created by Jordan.Ross on 4/18/2017.
  */
-let readingApp = angular.module('readingApp', []);
+let readingApp = angular.module('readingApp', ['ngSanitize']);
 
 readingApp.controller('BookController', ['$scope', '$http', '$timeout',
     function ($scope, $http, $timeout) {
