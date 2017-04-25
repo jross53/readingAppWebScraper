@@ -29,6 +29,10 @@ body {
     width: 40px;
 }
 
+.changeFontColorButton, .hideFontSliderButton {
+    float: right;
+}
+
 .listItemHeader {
     font-size: 25px;
     color: #555;

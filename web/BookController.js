@@ -1,12 +1,23 @@
 /**
  * Created by Jordan.Ross on 4/18/2017.
  */
-let readingApp = angular.module('readingApp', ['ngSanitize']);
+let readingApp = angular.module('readingApp', ['ngSanitize', 'rzModule']);
 
-readingApp.controller('BookController', ['$scope', '$http', '$timeout',
+readingApp.controller('BookController', ['$scope', '$http', '$timeout', '$interval',
     function ($scope, $http, $timeout) {
         $scope.books = [];
         $scope.modalIsHidden = true;
+        $scope.showFontSlider = false;
+        $scope.defaultSliderValue = 6;
+        $scope.slider = {
+            value: 6,
+            options: {
+                showSelectionBar: true,
+                floor: 0,
+                ceil: 70,
+                step: 1
+            }
+        };
 
         function getBooks() {
             $http.get('/books').then(displayBooks);
@@ -26,6 +37,7 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
         }
 
         $scope.displayBook = function (book) {
+            $scope.showFontSlider = false;
             $scope.modalIsHidden = false;
             $scope.selectedBook = book;
             $scope.currentPageNumber = book.currentPage;
@@ -33,7 +45,7 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
         };
 
         function fadeInBookImage() {
-            $timeout(function() {
+            $timeout(function () {
                 $scope.modalIsHidden = true;
             }, 500);
         }
@@ -68,6 +80,31 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
                 $scope.currentPageNumber--;
             }
         };
+
+        $scope.toggleFontSliderVisible = function() {
+            $scope.showFontSlider = !$scope.showFontSlider;
+            if($scope.showFontSlider === true) {
+                initializeSlider();
+            }
+        };
+
+        function initializeSlider() {
+            // $timeout(function() {
+            //     $scope.$broadcast('reCalcViewDimensions');
+            // }, 250);
+            //
+            $timeout(function () {
+                $scope.$broadcast('rzSliderForceRender');
+            });
+
+            // let currentValue = $scope.slider.value;
+            // $scope.slider.value = 0;
+            // for(let times = 0; times < currentValue; times++) {
+            //     $timeout(function() {
+            //         $scope.slider.value++;
+            //     }, 200);
+            // }
+        }
 
         getBooks();
     }
