@@ -10,6 +10,20 @@ body {
     float: left;
 }
 
+@media only screen and (max-width: 400px) {
+    .badge {
+        display: none !important;
+    }
+}
+
+.navbar {
+    z-index: 1071;
+}
+
+.modal {
+    z-index: 1072 !important;
+}
+
 .headerImage {
     padding-top: 4px;
     width: 40px;

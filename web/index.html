@@ -11,15 +11,16 @@
 </head>
 <body class="container-fluid" ng-app="readingApp" ng-controller="BookController" ng-cloak>
 <header class="navbar navbar-default navbar-fixed-top navbar-inner">
-    <img ng-show="modelIsHidden" class="img-responsive center-block headerImage" src="favicon.png">
+    <img ng-if="modalIsHidden" class="img-responsive center-block headerImage fade in "
+          src="favicon.png">
 </header>
 <div class="row">
     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
         <div class="list-group">
             <span class="listItemHeader">Read books</span>
             <a href="#" class="list-group-item list-group-item-action"
-               ng-repeat="book in books | orderBy: 'percentageRead' : true"
-               ng-if="getPercentage(book) === 100"
+               ng-repeat="book in books"
+               ng-if="book.percentageRead === 100"
                ng-click="displayBook(book)">
                 {{book.title}}
             </a>
@@ -30,13 +31,13 @@
             <span class="listItemHeader">Unread books</span>
             <a href="#" class="list-group-item list-group-item-action"
                ng-repeat="book in books | orderBy: 'percentageRead' : true"
-               ng-if="getPercentage(book) < 100"
+               ng-if="book.percentageRead < 100"
                ng-click="displayBook(book)"
                data-toggle="modal" data-target="#myModal">
                 {{book.title}}
-                <span ng-show="modelIsHidden" class="badge tooltip">
+                <span ng-show="modalIsHidden" class="badge tooltip">
                     <span class="tooltiptext">Percent Read</span>
-                    {{getPercentage(book)}}%
+                    {{book.percentageRead}}%
                 </span>
             </a>
         </div>

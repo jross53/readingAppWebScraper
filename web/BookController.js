@@ -3,53 +3,60 @@
  */
 let readingApp = angular.module('readingApp', []);
 
-readingApp.controller('BookController', ['$scope', '$http',
-    function ($scope, $http) {
+readingApp.controller('BookController', ['$scope', '$http', '$timeout',
+    function ($scope, $http, $timeout) {
         $scope.books = [];
-        $scope.modelIsHidden = true;
+        $scope.modalIsHidden = true;
 
         function getBooks() {
             $http.get('/books').then(displayBooks);
         }
 
         function displayBooks(books) {
+            books.data.forEach(book => book.percentageRead = getPercentage(book));
             $scope.books = books.data;
         }
 
-        $scope.getPercentage = function (book) {
-            if(book.currentPage !== 1) return Math.floor((book.currentPage / book.totalPages) * 100);
-            else return 0;
-        };
+        function getPercentage(book) {
+            if (book.currentPage !== 1) {
+                return Math.floor((book.currentPage / book.totalPages) * 100);
+            }
+
+            return 0;
+        }
 
         $scope.displayBook = function (book) {
-            $scope.modelIsHidden = false;
-            console.log(`Book clicked: ${book.title}`);
+            $scope.modalIsHidden = false;
             $scope.selectedBook = book;
             $scope.currentPageNumber = book.currentPage;
             $scope.currentPage = book.pages[$scope.currentPageNumber - 1];
         };
 
+        function fadeInBookImage() {
+            $timeout(function() {
+                $scope.modalIsHidden = true;
+            }, 500);
+        }
+
         $scope.close = function (result) {
             let data = {"currentPage": $scope.currentPageNumber};
-            console.log(`Current page number is ${$scope.currentPageNumber}`);
-            console.log(`Data is sent as ${JSON.stringify(data)}`);
             $http.put(`/book/${$scope.selectedBook.title}.json`, data)
                 .then(
-                    function(response){
+                    function (response) {
                         // success callback
                         console.log(`Success, response: ${response}`);
                     },
-                    function(response){ //its calling this when the page is reloaded for some reason?
+                    function (response) { //its calling this when the page is reloaded for some reason?
                         // failure callback
                         console.log(`Failure, response: ${response}`);
                     }
                 );
-            $scope.modelIsHidden = true;
+            fadeInBookImage();
             $http.get('/books').then(displayBooks);
         };
 
-        $scope.pageForward = function(book) {
-            if($scope.currentPageNumber !== book.totalPages) {
+        $scope.pageForward = function (book) {
+            if ($scope.currentPageNumber !== book.totalPages) {
                 $scope.currentPage = book.pages[$scope.currentPageNumber];
                 $scope.currentPageNumber++;
             }
@@ -58,8 +65,8 @@ readingApp.controller('BookController', ['$scope', '$http',
             }
         };
 
-        $scope.pageBack = function(book){
-            if($scope.currentPageNumber > 1) {
+        $scope.pageBack = function (book) {
+            if ($scope.currentPageNumber > 1) {
                 $scope.currentPage = book.pages[$scope.currentPageNumber - 2];
                 $scope.currentPageNumber--;
             }
