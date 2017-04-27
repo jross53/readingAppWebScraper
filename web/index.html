@@ -10,7 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.1.1/rzslider.min.css">
     <link rel="stylesheet" href="index.css">
 </head>
-<body class="container-fluid" ng-app="readingApp" ng-controller="BookController" ng-cloak>
+<body class="container-fluid"
+      ng-app="readingApp"
+      ng-controller="BookController"
+      ng-cloak>
 <header class="navbar navbar-default navbar-fixed-top navbar-inner">
     <img ng-if="modalIsHidden" class="img-responsive center-block headerImage fade in "
          src="favicon.png">
@@ -36,7 +39,7 @@
                data-toggle="modal" data-target="#readBookModal">
                 {{book.title}}
                 <span ng-show="modalIsHidden" class="badge tooltip">
-                    <span class="tooltiptext">Percent Read</span>
+                    <span class="toolTipText">Percent Read</span>
                     {{book.percentageRead}}%
                 </span>
             </a>
@@ -49,7 +52,8 @@
     <div class="modal-dialog">
 
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content"
+             ng-style="{'background-color': nightVisionIsEnabled ? '#333' : 'white', 'color': nightVisionIsEnabled ? 'white' : 'black'}">
             <div class="modal-header">
                 <button type="button" ng-click="close()" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">{{selectedBook.title}}</h4>
@@ -64,6 +68,12 @@
                 <div ng-show="showFontSlider">
                     <rzslider id="fontSlider" rz-slider-model="slider.value"
                               rz-slider-options="slider.options"></rzslider>
+                </div>
+                <div class="tooltip nightVisionTooltip">
+                    <span class="glyphicon glyphicon-eye-open nightVisionIcon"
+                          ng-click="toggleNightVision()"
+                          ng-style="{'color': nightVisionIsEnabled ? 'white' : 'black'}"></span>
+                    <span class="toolTipText nightVisionTooltipText">{{nightVisionTooltipText}}</span>
                 </div>
             </div>
             <div class="modal-body"

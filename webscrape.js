@@ -126,7 +126,6 @@ function cleanBooks(book) {
     for(let i = 0; i < book.totalPages; i++){
         book.pages[i] = book.pages[i].replace(/\n/g, "<br>");
     }
-    if(book.title === "Moby-Dick") console.log(book);
     return book;
 }
 

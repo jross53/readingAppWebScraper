@@ -24,6 +24,11 @@ body {
     z-index: 1071;
 }
 
+.nightVisionIcon {
+    padding-top: 10px;
+    cursor: pointer;
+}
+
 .modal {
     z-index: 1072 !important;
 }
@@ -68,7 +73,7 @@ a:focus {
     opacity: 100 !important;
 }
 
-.tooltip .tooltiptext {
+.tooltip .toolTipText {
     visibility: hidden;
     width: 120px;
     background-color: black;
@@ -83,7 +88,11 @@ a:focus {
     margin-left: -80px;
 }
 
-.tooltip .tooltiptext::after {
+.nightVisionTooltipText {
+    bottom: 100% !important;
+}
+
+.tooltip .toolTipText::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -93,11 +102,11 @@ a:focus {
     border-top-color: black;
 }
 
-.tooltiptext {
+.toolTipText {
     opacity: .85;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltip:hover .toolTipText {
     visibility: visible;
 }
 

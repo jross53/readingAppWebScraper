@@ -9,6 +9,9 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
         $scope.modalIsHidden = true;
         $scope.showFontSlider = false;
         $scope.defaultSliderValue = 6;
+        $scope.nightVisionIsEnabled = false;
+        $scope.nightVisionTooltipText = "";
+
         function createSlider() {
             //the slider range is 0 to 70
             //the actual font range is 8px to 78px, but for a better user experience the slider values are offset
@@ -105,7 +108,17 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
             });
         }
 
+        function toggleNightVisionToolTipText() {
+            $scope.nightVisionTooltipText = $scope.nightVisionIsEnabled ? 'Day Mode' : 'Night Mode';
+        }
+
+        $scope.toggleNightVision = function() {
+            $scope.nightVisionIsEnabled = !$scope.nightVisionIsEnabled;
+            toggleNightVisionToolTipText();
+        };
+
         createSlider();
         getBooks();
+        toggleNightVisionToolTipText();
     }
 ]);
