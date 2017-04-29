@@ -58,8 +58,8 @@ readingApp.controller('BookController', ['$scope', '$http', '$timeout',
         }
 
         $scope.close = function () {
-            let data = {"currentPage": $scope.currentPageNumber};
-            $http.put(`/book/${$scope.selectedBook.title}.json`, data)
+            let data = {'currentPage': $scope.currentPageNumber};
+            $http.put(`/book/${$scope.selectedBook.title}`, data)
                 .then(
                     function (response) {
                         // success callback

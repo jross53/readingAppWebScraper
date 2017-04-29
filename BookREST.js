@@ -30,7 +30,7 @@ router.get('/books', function (req, res) {
     });
 });
 
-router.put('/book/:title.json', function(req, res){
+router.put('/book/:title', function(req){
     console.log(`Updating book: ${req.params.title}`);
     mongoDAO.updateBook(req.params.title, req.body)
 });

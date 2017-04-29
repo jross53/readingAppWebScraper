@@ -62,11 +62,6 @@ a:focus {
     outline: none;
 }
 
-.active:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
-}
-
 .tooltip {
     position: relative;
     display: inline-block;
